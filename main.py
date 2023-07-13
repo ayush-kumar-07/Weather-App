@@ -6,47 +6,37 @@ from timezonefinder import TimezoneFinder
 from datetime import datetime
 import requests
 import pytz
-# from PIL import ImageTk
 
-root = Tk()     # It is an intance/object of class "Tk()".
+root = Tk()
 
 root.title("Weather App")
 root.geometry("900x500")
-root.resizable(False, False)        # This method is used when user wants a specific size of the GUI window. 
-                                    # The "minimize"/"maximize" button is disabled when false. 
+root.resizable(False, False)        
 root.minsize(900, 500)          
 # root.maxsize(1380, 720)
 
 def getWeather():
-    try:
-
-        # To get the user input, which the user will provide in the GUI. 
-        city = textfield.get()
-
-        # To get the timezone of the seached city
+    try: 
+        city = textfield.get() 
         geolocator = Nominatim(user_agent = "geoapiExercises")
         location = geolocator.geocode(city)
         obj = TimezoneFinder()
         result = obj.timezone_at(lng = location.longitude, lat=location.latitude)
-        # print(result)
-
-        # To display the Current time when a city is searched.
-        home = pytz.timezone(result)
+        home = pytz.timezone(result)    
         local_time = datetime.now(home)
         current_time = local_time.strftime("%I:%M %p")
-        clock.config(text=current_time)
-        name.config(text="CURRENT WEATHER")
+        clock.config(text=current_time)     
+        name.config(text="CURRENT WEATHER")     
 
         # Weather
         api = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=7d8b97ff910062a8c9905c256aa3be43"
 
-        json_data = requests.get(api).json()
-
+        json_data = requests.get(api).json()      
         print(json_data)
 
-        condition = json_data['weather'][0]['main']
-        description = json_data['weather'][0]['description']
-        temp = int(json_data['main']['temp']-273.15)
+        condition = json_data['weather'][0]['main']    
+        description = json_data['weather'][0]['description']    
+        temp = int(json_data['main']['temp']-273.15)   
         pressure = json_data['main']['pressure']
         humidity = json_data['main']['humidity'] 
         wind = json_data['wind']['speed']
@@ -69,8 +59,7 @@ myimage.place(x=20, y=20)
 
 textfield = tk.Entry(root, justify="center", width=17, font=("poppins", 23), bg="#404040", border=0, fg="white")
 textfield.place(x=60, y=40)
-textfield.focus()       # "focus()" method means, by default the following will have active cursor. It is like the dotted
-                        # outline on the button.
+textfield.focus()       
 
 Search_icon = PhotoImage(file="Images\search_icon.png")
 myimage_icon = Button(image=Search_icon, borderwidth=0, cursor="hand2", bg="#404040", command=getWeather)
